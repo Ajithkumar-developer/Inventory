@@ -43,12 +43,12 @@ class StockCalculatorService:
                 # ------------------------
                 # STOCK CALCULATION
                 # ------------------------
-                stock = round(device.Weight / inv.UnitWeight, 2)
+                stock = int(device.Weight / inv.UnitWeight)
 
                 # ------------------------
                 # STATUS LOGIC
                 # ------------------------
-                if stock == 0:
+                if stock <= 0:
                     status = "OutOfStock"
                 elif stock < inv.Threshold:
                     status = "LowStock"
