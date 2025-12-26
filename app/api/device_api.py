@@ -1,12 +1,14 @@
 from fastapi import APIRouter
 from ..config import settings
-from ..crud.device_manager import DeviceManager
+from ..crud.device_manager import DeviceManager, WeightTrackingManager, ActivityLogManager
 from ..schemas.device_schema import (
     DeviceCreate,
     DeviceUpdate,
     BatteryUpdate,
     LocationUpdate,
-    TrackingUpdate
+    TrackingUpdate,
+    WeightTrackingCreate,
+    ActivityLogCreate
 )
 
 
@@ -72,3 +74,61 @@ class DeviceAPI:
 
     async def get_all_tracking(self):
         return await self.crud.get_all_tracking()
+
+
+
+class WeightTrackingAPI:
+    def __init__(self):
+        self.router = APIRouter()
+        self.manager = WeightTrackingManager(settings.db_type)
+        self._routes()
+
+    def _routes(self):
+        self.router.post("/device/{device_id}/weight-tracking")(self.create)
+        self.router.get("/device/{device_id}/weight-tracking")(self.get)
+        self.router.delete("/device/{device_id}/weight-tracking")(self.delete)
+        self.router.delete("/device/weight-tracking")(self.clear)
+
+    async def create(self, device_id: int, payload: WeightTrackingCreate):
+        return await self.manager.create(device_id, payload.Weight)
+
+    async def get(self, device_id: int, filter: str = None):
+        data = await self.manager.get(device_id, filter)
+        return {"success": True, "data": data}
+
+    async def delete(self, device_id: int):
+        rows = await self.manager.delete_by_device(device_id)
+        return {"success": True, "deleted": rows}
+
+    async def clear(self):
+        await self.manager.clear()
+        return {"success": True, "message": "Weight tracking cleared"}
+    
+
+
+class ActivityLogAPI:
+    def __init__(self):
+        self.router = APIRouter()
+        self.manager = ActivityLogManager(settings.db_type)
+        self._routes()
+
+    def _routes(self):
+        self.router.post("/device/{device_id}/activity-tracking")(self.create)
+        self.router.get("/device/{device_id}/activity-tracking")(self.get)
+        self.router.delete("/device/{device_id}/activity-tracking")(self.delete)
+        self.router.delete("/device/activity-tracking")(self.clear)
+
+    async def create(self, device_id: int, payload: ActivityLogCreate):
+        return await self.manager.create(device_id, payload.Event)
+
+    async def get(self, device_id: int, filter: str = None):
+        data = await self.manager.get(device_id, filter)
+        return {"success": True, "data": data}
+
+    async def delete(self, device_id: int):
+        rows = await self.manager.delete_by_device(device_id)
+        return {"success": True, "deleted": rows}
+
+    async def clear(self):
+        await self.manager.clear()
+        return {"success": True, "message": "Activity log cleared"}

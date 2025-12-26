@@ -32,3 +32,25 @@ class Device(Base):
 
     CreatedAt = Column(DateTime, default=datetime.utcnow)
     UpdatedAt = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+
+
+
+class WeightTracking(Base):
+    __tablename__ = "WeightTracking"
+
+    WeightTrackingId = Column(Integer, primary_key=True, index=True)
+    DeviceId = Column(Integer, nullable=False)
+    DateTime = Column(DateTime, default=datetime.utcnow)
+    Weight = Column(Float, nullable=False)
+
+
+
+class ActivityLog(Base):
+    __tablename__ = "ActivityLog"
+
+    ActivityLogId = Column(Integer, primary_key=True, index=True)
+    DeviceId = Column(Integer, nullable=False)
+    DateTime = Column(DateTime, default=datetime.utcnow)
+    Event = Column(String(255), nullable=False)

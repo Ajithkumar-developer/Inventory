@@ -86,6 +86,34 @@ class TableCreator:
         """
         self._execute(sql, "Inventory")
 
+    # --------------------------------------------------
+    # WEIGHT TRACKING TABLE
+    # --------------------------------------------------
+    def create_weight_tracking_table(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS WeightTracking (
+            WeightTrackingId INTEGER PRIMARY KEY AUTOINCREMENT,
+            DeviceId INTEGER NOT NULL,
+            DateTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+            Weight REAL NOT NULL
+        );
+        """
+        self._execute(sql, "WeightTracking")
+
+    # --------------------------------------------------
+    # ACTIVITY LOG TABLE
+    # --------------------------------------------------
+    def create_activity_log_table(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS ActivityLog (
+            ActivityLogId INTEGER PRIMARY KEY AUTOINCREMENT,
+            DeviceId INTEGER NOT NULL,
+            DateTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+            Event TEXT NOT NULL
+        );
+        """
+        self._execute(sql, "ActivityLog")
+
     # ------------------------------------------------------------------
     # INTERNAL HELPER
     # ------------------------------------------------------------------
@@ -109,6 +137,8 @@ class TableCreator:
         self.create_device_table()
         self.create_order_table()
         self.create_inventory_table()
+        self.create_weight_tracking_table()
+        self.create_activity_log_table()
 
 
 
