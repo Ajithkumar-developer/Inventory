@@ -9,13 +9,13 @@ class DeviceBase(BaseModel):
     ConnectionMode: Optional[str]
 
     Capacity: Optional[float]
-    Weight: Optional[float]
+    # Weight: Optional[float]
 
-    LastReading: Optional[float]
+    # LastReading: Optional[float]
     Battery: Optional[int]
     Status: Optional[str]
 
-    InventoryId: Optional[int]
+    # InventoryId: Optional[int]
     Notes: Optional[str]
 
     LocationName: Optional[str]
@@ -59,32 +59,3 @@ class TrackingUpdate(BaseModel):
     Status: Optional[str]
 
 
-
-# -------- Weight Tracking Schemas --------
-class WeightTrackingCreate(BaseModel):
-    Weight: float
-
-
-class WeightTrackingRead(BaseModel):
-    WeightTrackingId: int
-    DeviceId: int
-    DateTime: datetime
-    Weight: float
-
-    class Config:
-        from_attributes = True
-
-
-
-class ActivityLogCreate(BaseModel):
-    Event: str
-
-
-class ActivityLogRead(BaseModel):
-    ActivityLogId: int
-    DeviceId: int
-    DateTime: datetime
-    Event: str
-
-    class Config:
-        from_attributes = True

@@ -16,13 +16,13 @@ class Device(Base):
     ConnectionMode = Column(String(100), nullable=True)
 
     Capacity = Column(Float, nullable=True)
-    Weight = Column(Float, nullable=True)
+    # Weight = Column(Float, nullable=True)
 
-    LastReading = Column(Float, nullable=True)
+    # LastReading = Column(Float, nullable=True)
     Battery = Column(Integer, nullable=True)
     Status = Column(String(50), nullable=True)
 
-    InventoryId = Column(Integer, nullable=True)
+    # InventoryId = Column(Integer, nullable=True)
 
     Notes = Column(String(500), nullable=True)
 
@@ -36,21 +36,3 @@ class Device(Base):
 
 
 
-
-class WeightTracking(Base):
-    __tablename__ = "WeightTracking"
-
-    WeightTrackingId = Column(Integer, primary_key=True, index=True)
-    DeviceId = Column(Integer, nullable=False)
-    DateTime = Column(DateTime, default=datetime.utcnow)
-    Weight = Column(Float, nullable=False)
-
-
-
-class ActivityLog(Base):
-    __tablename__ = "ActivityLog"
-
-    ActivityLogId = Column(Integer, primary_key=True, index=True)
-    DeviceId = Column(Integer, nullable=False)
-    DateTime = Column(DateTime, default=datetime.utcnow)
-    Event = Column(String(255), nullable=False)

@@ -37,11 +37,8 @@ class TableCreator:
             DeviceType TEXT,
             ConnectionMode TEXT,
             Capacity REAL,
-            Weight REAL,
-            LastReading REAL,
             Battery INTEGER,
             Status TEXT,
-            InventoryId INTEGER,
             Notes TEXT,
             LocationName TEXT,
             Latitude REAL,
@@ -64,27 +61,65 @@ class TableCreator:
         );
         """
         self._execute(sql, "Orders")
+    
+    # --------------------------------------------------
+    # ITEM TABLE
+    # --------------------------------------------------
+    def create_item_table(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Item (
+            ItemId INTEGER PRIMARY KEY AUTOINCREMENT,
+            ItemName TEXT NOT NULL,
+            Category TEXT,
+            Description TEXT,
+            PerUnitWeight REAL NOT NULL,
+            Measurement TEXT,
+            MinThreshold REAL,
+            MaxThreshold REAL,
+            CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+        """
+        self._execute(sql, "Item")
 
+    # --------------------------------------------------
+    # INVENTORY TABLE
+    # --------------------------------------------------
     def create_inventory_table(self):
         sql = """
         CREATE TABLE IF NOT EXISTS Inventory (
             InventoryId INTEGER PRIMARY KEY AUTOINCREMENT,
-            ItemCode TEXT,
-            ItemName TEXT,
-            Category TEXT,
-            Description TEXT,
+            ItemId INTEGER NOT NULL,
             DeviceId INTEGER,
-            UnitWeight REAL,
-            Stock REAL,
-            Threshold REAL,
-            StockOut REAL,
-            Consumption REAL,
-            Status TEXT,
-            CreatedAt DATETIME,
-            UpdatedAt DATETIME
+            Weight REAL,
+            CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         );
         """
         self._execute(sql, "Inventory")
+
+
+
+    # def create_inventory_table(self):
+    #     sql = """
+    #     CREATE TABLE IF NOT EXISTS Inventory (
+    #         InventoryId INTEGER PRIMARY KEY AUTOINCREMENT,
+    #         ItemCode TEXT,
+    #         ItemName TEXT,
+    #         Category TEXT,
+    #         Description TEXT,
+    #         DeviceId INTEGER,
+    #         UnitWeight REAL,
+    #         Stock REAL,
+    #         Threshold REAL,
+    #         StockOut REAL,
+    #         Consumption REAL,
+    #         Status TEXT,
+    #         CreatedAt DATETIME,
+    #         UpdatedAt DATETIME
+    #     );
+    #     """
+    #     self._execute(sql, "Inventory")
 
     # --------------------------------------------------
     # WEIGHT TRACKING TABLE
@@ -136,6 +171,7 @@ class TableCreator:
         self.create_user_table()
         self.create_device_table()
         self.create_order_table()
+        self.create_item_table()
         self.create_inventory_table()
         self.create_weight_tracking_table()
         self.create_activity_log_table()
